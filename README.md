@@ -4,7 +4,7 @@ This package provides algorithms for solving the linear SVM problem.
 
 ## ADMM
 
-Uses the [ADMM framework](https://web.stanford.edu/~boyd/papers/pdf/admm_distr_stats.pdf) by Stephen Boyd.
+Uses the [ADMM framework](https://web.stanford.edu/~boyd/papers/pdf/admm_distr_stats.pdf) to solve linear SVM in parallel.
 The algorithm is developed by [Caoxie Zhang, Honglak Lee and Kang G. Shin](http://www.jmlr.org/proceedings/papers/v22/zhang12a/zhang12a.pdf).
 For solving the subproblem the dual coordinate descent method is used.
 
