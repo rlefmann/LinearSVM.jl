@@ -2,6 +2,8 @@
 
 This package provides algorithms for solving the linear SVM problem.
 
+**WARNING: This is a work in progress**
+
 ## ADMM
 
 Uses the [ADMM framework](https://web.stanford.edu/~boyd/papers/pdf/admm_distr_stats.pdf) to solve linear SVM in parallel.
