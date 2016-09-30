@@ -1,5 +1,8 @@
 """
-Reads a dataset from a csv file. Each row of the dataset should be an
+   `loadDataset(filepath)`
+    
+Reads a dataset from a csv file located at `filepath`.
+Each row of the dataset should be an
 example, each column a feature. The last column are the targets, which
 are assumed to be binary labels 0 and 1.
 A column of ones is added to the beginning of the dataset and the set is
@@ -49,11 +52,17 @@ end
 
 
 """
+   `testResult(w, test_x, test_y)`
+
 Measures the classification performance of a hyperplane with normal
-vector w on test data.
+vector `w` on test data.
+
+### Returns
+ * `acc`: accuracy on the test data set
 """
 function testResult(w, test_x, test_y)
     predicted_y = sign(test_x*w)
     acc = mean((predicted_y .== test_y))
     @printf "Accuracy: %.2f%%\n" acc*100
+    return acc
 end

@@ -2,8 +2,13 @@ using DistributedArrays
 
 include("ADMMWorker.jl")
 
-# distributes x and y to the workers and returns
-# two DistributedArrays
+
+"""
+`distributeData(x,y)`
+
+Distributes x and y to the available worker processes and returns
+them as distributed Arrays.
+"""
 function distributeData(x::Array{Float64,2}, y::Array{Float64,1})
     print("distributing x and y...\t\t")
     tic()
@@ -17,7 +22,30 @@ function distributeData(x::Array{Float64,2}, y::Array{Float64,1})
     return (x,y)
 end
 
+
 # TODO: if we dont normalize then z will grow very large. Where should the normalization happen??
+"""
+`admm(x,y;<keyword arguments>)`
+
+Solves the SVM problem in parallel using the ADMM framework by Stephen Boyd.
+See https://web.stanford.edu/~boyd/papers/pdf/admm_distr_stats.pdf.
+The algorithm is developed by Caoxie Zhang, Honglak Lee and Kang G. Shin.
+See http://www.jmlr.org/proceedings/papers/v22/zhang12a/zhang12a.pdf.
+For solving the subproblem the dual coordinate descent method is used.
+
+
+### Keyword arguments
+* `C=1.0`:
+the parameter C of the SVM problem
+* `rho=1.0`
+* `shrinking=false`: the method uses the shrinking heuristic by Thorsten Joachims if true. See https://www.cs.cornell.edu/people/tj/publications/joachims_99a.pdf
+* `outer_iterations=10`: the number of admm iterations
+* `inner_iterations=10`: the number of iterations of the dual coordinate descent performed during each admm iteration
+* `parallel=true`: The subproblem is solved in parallel if true
+
+### Returns
+* weight vector `w`
+"""
 function admm(
 x::DistributedArrays.DArray{Float64,2,Array{Float64,2}},
 y::DistributedArrays.DArray{Float64,1,Array{Float64,1}};
@@ -25,7 +53,7 @@ C=1.0,
 rho=1.0,
 outer_iterations=10,
 inner_iterations=10,
-parallel=false
+parallel=true
 )
     tic()
     N = nprocs()-1

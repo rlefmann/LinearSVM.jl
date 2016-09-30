@@ -11,6 +11,26 @@ function primal_objective(x::Array{Float64,2}, y::Array{Float64,1}; C=1.0)
 end
 
 
+"""
+`dualcd(x, y; <keyword arguments>)`
+
+Solves the linear SVM problem on the given training set of examples `x`
+and labels `y` with the Dual Coordinate Descent
+method by Cho-Jui Hsieh, Kai-Wei Chang, Chih-Jen Lin, S. Sathiya Keerthi and S. Sundararajan.
+
+See https://www.csie.ntu.edu.tw/~cjlin/papers/cddual.pdf
+
+### Keyword arguments
+* `C=1.0`:
+the parameter C of the SVM problem
+* `shrinking=false`: the method uses the shrinking heuristic by Thorsten Joachims if true. See https://www.cs.cornell.edu/people/tj/publications/joachims_99a.pdf
+* `iterations=1000`: the number of iterations performed until `w` is returned
+* `verbose=false`: the differences in the maximum and minimum projected gradient is printed if true
+* `eps=0.001`: the algorithm terminates once the difference in the maximum and minimum projected gradient is smaller than `eps`. Typically `eps` has to be large for this stopping criterion to take effect.
+
+### Returns
+* weight vector `w`
+"""
 function dualcd(x::Array{Float64,2}, y::Array{Float64,1}; C=1.0, shrinking=false, iterations=1000, verbose=false, eps=0.001)
 
     s,d = size(x) # s: number of data points
@@ -18,10 +38,6 @@ function dualcd(x::Array{Float64,2}, y::Array{Float64,1}; C=1.0, shrinking=false
 
     # compute initial w:
     w = At_mul_B(x, y.*alpha)
-
-    if verbose
-        println("initial w: ",w[1:min(6,length(w))],"...")
-    end
     
     # Precompute (Q+D)_ii:
     QD = Array{Float64,1}(s)
